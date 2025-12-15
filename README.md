@@ -9,6 +9,11 @@ This project deploys a highly available web architecture on AWS using Infrastruc
 * **Networking:** Default VPC, Multi-AZ Deployment (us-east-1a, us-east-1b)
 * **Traffic Management:** Application Load Balancer (ALB) with Target Groups
 
+## 🎥 Demo
+*Watch the Load Balancer automatically route traffic between AZ-A and AZ-B upon refresh:*
+
+![screen_recording](./public/video/screenrecording-2025-12-15_22-52-44.mp4)
+
 ## 🛠 Prerequisites
 * Terraform installed
 * AWS CLI configured with valid credentials
