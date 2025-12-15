@@ -42,3 +42,38 @@ resource aws_security_group web_sg {
     cidr_blocks = [0.0.0.0/0]
   }
 }
+
+# The Two Servers
+resource "aws_instance" "server_1" {
+  ami             = data.aws_ami.amazon_linux.id
+  instance_type   = "t2.micro"
+  subnet_id       = data.aws_subnets.default.ids[0]
+  security_groups = [aws_security_group.web_sg.id]
+  tags            = { Name = "Terraform-Server-1" }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+              echo "<h1>Hello from SERVER 1</h1>" > /var/www/html/index.html
+              EOF
+}
+
+resource "aws_instance" "server_2" {
+  ami             = data.aws_ami.amazon_linux.id
+  instance_type   = "t2.micro"
+  subnet_id       = data.aws_subnets.default.ids[1]
+  security_groups = [aws_security_group.web_sg.id]
+  tags            = { Name = "Terraform-Server-2" }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+              echo "<h1>Hello from SERVER 2</h1>" > /var/www/html/index.html
+              EOF
+}
