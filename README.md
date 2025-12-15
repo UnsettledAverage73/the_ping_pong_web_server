@@ -9,6 +9,9 @@ This project deploys a highly available web architecture on AWS using Infrastruc
 * **Networking:** Default VPC, Multi-AZ Deployment (us-east-1a, us-east-1b)
 * **Traffic Management:** Application Load Balancer (ALB) with Target Groups
 
+## 🏗 Architecture Diagram
+![AWS Auto Scaling Architecture](./public/img/the_ping_pong_server.png)
+
 ## 🎥 Demo
 *Watch the Load Balancer automatically route traffic between AZ-A and AZ-B upon refresh:*
 
