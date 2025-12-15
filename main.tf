@@ -77,3 +77,48 @@ resource "aws_instance" "server_2" {
               echo "<h1>Hello from SERVER 2</h1>" > /var/www/html/index.html
               EOF
 }
+# Load Balancer
+resource aws_lb my_alb {
+  name               = terraform-ping-pong-alb
+  internal           = false
+  load_balancer_type = application
+  security_groups    = [aws_security_group.web_sg.id]
+  subnets            = data.aws_subnets.default.ids
+}
+
+# Target Group
+resource aws_lb_target_group my_tg {
+  name     = terraform-target-group
+  port     = 80
+  protocol = HTTP
+  vpc_id   = data.aws_vpc.default.id
+}
+
+# Attachments
+resource aws_lb_target_group_attachment attach_server_1 {
+  target_group_arn = aws_lb_target_group.my_tg.arn
+  target_id        = aws_instance.server_1.id
+  port             = 80
+}
+
+resource aws_lb_target_group_attachment attach_server_2 {
+  target_group_arn = aws_lb_target_group.my_tg.arn
+  target_id        = aws_instance.server_2.id
+  port             = 80
+}
+
+# Listener
+resource aws_lb_listener front_end {
+  load_balancer_arn = aws_lb.my_alb.arn
+  port              = 80
+  protocol          = HTTP
+
+  default_action {
+    type             = forward
+    target_group_arn = aws_lb_target_group.my_tg.arn
+  }
+}
+
+output load_balancer_dns {
+  value = aws_lb.my_alb.dns_name
+}
